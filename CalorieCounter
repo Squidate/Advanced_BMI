@@ -1,6 +1,7 @@
 package com.mycompany.caloriecounter;
 
 import java.text.DecimalFormat;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -10,72 +11,70 @@ import java.util.Scanner;
  */
 public class CalorieCounter {
 
-    public static void main(String[] args) {
-        bb.BMI();
-        //test.test();
-        //input.close();
-        }
-    public static class bb{
-        private static double bmi;
-        private static double fat;
-    
-    public static void BMI(){
-         
-        Scanner input = new Scanner(System.in);
-        
-        System.out.println("enter height in inches");
-        double height = input.nextDouble();
-        
-        System.out.println("\nenter weight in pounds"); 
-        double weight = input.nextDouble();
-        
-        
-        bmi = weight/Math.pow(height, 2)*703+2;
-        
-        DecimalFormat df = new DecimalFormat("0.0");
-        System.out.println("\nyour BMI is: " + df.format(bmi));
-        
-        fat = weight * (bmi/100)+0.1;
-        System.out.println("\npounds of fat: " + df.format(fat));
-        
-        if (bmi <= 30.0){
-            test.test();
-        } else if (bmi > 30.0){
-            System.out.println("\nyour bmi is too high to accurately calculate a calorie count. Please refer to chart below:\n");
-            if (height <= 66){
-                System.out.println("""
-                                   Male: 1250-1500 calories a day
-                                   Female: 1200-1300 calories a day""");
-            } else if (height > 66){
-                System.out.println("""
-                                   Male: 1500-1750 calories a day
-                                   Female: 1300-1500 Calories per day""");
-            }
-            }
+	public static void main(String[] args) {
+		bb.BMI();
 
-    }
-    public double getbmi(){
-        return bmi;
-    }
-    public void setbmi(){
-        this.bmi = bmi;
-    }
-    public double getFat(){
-        return fat;
-    }
-    public void setFat(){
-        this.fat = fat;
-    }
-    }
-    
-    public static class test{
-    public static void test(){ 
-        int cals = (int)bb.fat * 31;
-        double fatPerWeek = ((double)cals * 7)/3500;
-        DecimalFormat df = new DecimalFormat("0.0");
-        System.out.println("\ncalories you can eat per day to lose weight: " + cals);
-        System.out.println("\npounds you'll likely lose per week: " + df.format(fatPerWeek));
-    }
-        
-    }
-    }
+	}
+	public static class bb {
+		private static double bmi;
+		private static double fat;
+		static double height = 0;
+		static double weight = 0;
+
+		public static void BMI() {
+
+			Scanner input = new Scanner(System.in);
+
+			System.out.println("enter height in inches");
+			do {
+				try {
+					height = input.nextDouble();
+				} catch(InputMismatchException e) {
+					System.out.println("please enter height in integer or decimal");
+					input.nextLine();
+				}
+			} while(height <= 0 || height  > 1000);
+
+			System.out.println("\nenter weight in pounds");
+			do {
+				try {
+					weight = input.nextDouble();
+				} catch(InputMismatchException e) {
+					System.out.println("please enter weight in integer or decimal");
+					input.nextLine();
+				}
+			} while(weight <= 0 || weight > 1000);
+
+			bmi = weight/Math.pow(height, 2)*703+2;
+
+			DecimalFormat df = new DecimalFormat("0.0");
+			System.out.println("\nyour BMI is: " + df.format(bmi));
+
+			fat = weight * (bmi/100)+0.1;
+			System.out.println("\npounds of fat: " + df.format(fat));
+
+			if (bmi <= 30.0) {
+				int cals = (int)bb.fat * 31;
+				double fatPerWeek = ((double)cals * 7)/3500;
+				System.out.println("\ncalories you can eat per day to lose weight: " + cals);
+				System.out.println("\npounds you'll likely lose per week: " + df.format(fatPerWeek));
+
+			} else if (bmi > 30.0) {
+				System.out.println("\nyour bmi is too high to accurately calculate a calorie count. Please refer to chart below:\n");
+
+				if (height <= 66) {
+					System.out.println("""
+					                   Male: 1250-1500 calories a day
+					                   Female: 1200-1300 calories a day""");
+
+				} else if (height > 66) {
+					System.out.println("""
+					                   Male: 1500-1750 calories a day
+					                   Female: 1300-1500 Calories per day""");
+
+				}
+			}
+		}
+
+	}
+}
